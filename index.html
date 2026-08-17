@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Lawyer - Premium Legal Platform with AI Assistant, Lawyer Profiles, Constitutional Library & More">
+    <title>AI Lawyer | Premium Legal Intelligence Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/styles.css?v=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="loading-screen">
+            <div class="loading-content">
+                <div class="logo-animation">
+                    <svg viewBox="0 0 100 100" class="logo-svg">
+                        <circle cx="50" cy="50" r="45" class="logo-circle"></circle>
+                        <path d="M30 50 L45 65 L70 35" class="logo-check"></path>
+                    </svg>
+                </div>
+                <p class="loading-text">Initializing Legal Intelligence...</p>
+                <div class="loading-bar"><div class="loading-progress"></div></div>
+            </div>
+        </div>
+
+        <!-- Login Modal -->
+        <div id="login-modal" class="modal login-modal active">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content login-content">
+                <div class="login-header">
+                    <div class="login-logo">
+                        <svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="28" fill="none" stroke="currentColor" stroke-width="2"/><path d="M18 30 L27 39 L42 21" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <h1>Welcome to AI Lawyer</h1>
+                    <p>Your Premium Legal Intelligence Platform</p>
+                </div>
+                <div class="login-tabs">
+                    <button class="tab-btn active" data-tab="user">Client Login</button>
+                    <button class="tab-btn" data-tab="lawyer">Lawyer Portal</button>
+                    <button class="tab-btn" data-tab="govt">Government Access</button>
+                </div>
+                <form id="login-form" class="login-form">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" placeholder="Enter password" required>
+                            <button type="button" class="toggle-password"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-options">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" id="remember"> Remember me
+                        </label>
+                        <a href="#" class="forgot-password">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-login">Sign In</button>
+                </form>
+                <div class="login-divider"><span>Or continue with</span></div>
+                <div class="social-login">
+                    <button type="button" class="btn btn-social">Google</button>
+                    <button type="button" class="btn btn-social">Microsoft</button>
+                </div>
+                <p class="signup-prompt">New here? <a href="#" id="signup-link">Create Account</a></p>
+            </div>
+        </div>
+
+        <!-- Main App Layout -->
+        <div id="main-app" class="main-app hidden">
+            <!-- Top Navigation -->
+            <header class="top-nav" role="banner">
+                <div class="nav-brand">
+                    <a href="#" class="brand-link">
+                        <svg class="brand-icon" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 20 L18 26 L28 14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <span class="brand-text">AI Lawyer</span>
+                    </a>
+                </div>
+                <nav class="nav-main" role="navigation">
+                    <ul class="nav-list">
+                        <li><a href="#dashboard" class="nav-link active" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                        <li><a href="#lawyers" class="nav-link" data-section="lawyers"><i class="fas fa-gavel"></i> Find Lawyers</a></li>
+                        <li><a href="#ai-assistant" class="nav-link" data-section="ai-assistant"><i class="fas fa-robot"></i> AI Assistant</a></li>
+                        <li><a href="#constitution" class="nav-link" data-section="constitution"><i class="fas fa-book"></i> Constitution</a></li>
+                        <li><a href="#case-search" class="nav-link" data-section="case-search"><i class="fas fa-search"></i> Case Search</a></li>
+                        <li><a href="#call-bot" class="nav-link" data-section="call-bot"><i class="fas fa-phone"></i> AI Call Bot</a></li>
+                        <li><a href="#complaints" class="nav-link" data-section="complaints"><i class="fas fa-flag"></i> Complaints</a></li>
+                        <li><a href="#courts" class="nav-link" data-section="courts"><i class="fas fa-map-marker-alt"></i> Courts</a></li>
+                    </ul>
+                </nav>
+                <div class="nav-actions">
+                    <button class="btn btn-icon nav-language" id="language-btn" aria-label="Change Language">
+                        <i class="fas fa-globe"></i>
+                        <span class="lang-code">EN</span>
+                    </button>
+                    <button class="btn btn-icon nav-notifications" id="notifications-btn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <div class="user-menu">
+                        <button class="user-avatar" id="user-menu-btn">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" alt="User">
+                        </button>
+                        <div class="user-dropdown" id="user-dropdown">
+                            <div class="user-info">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" alt="User">
+                                <div>
+                                    <span class="user-name">John Doe</span>
+                                    <span class="user-role">Client</span>
+                                </div>
+                            </div>
+                            <a href="#profile" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
+                            <a href="#settings" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="#billing" class="dropdown-item"><i class="fas fa-credit-card"></i> Billing</a>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </header>
+
+            <!-- Language Selector Modal -->
+            <div id="language-modal" class="modal language-modal">
+                <div class="modal-backdrop"></div>
+                <div class="modal-content language-content">
+                    <div class="modal-header">
+                        <h2>Select Language / भाषा चुनें / भाषा चुनें</h2>
+                        <button class="modal-close" aria-label="Close"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="language-search">
+                        <input type="text" id="language-search" placeholder="Search languages...">
+                    </div>
+                    <div class="language-grid" id="language-grid"></div>
+                </div>
+            </div>
+
+            <!-- Main Content Sections -->
+            <main class="main-content" role="main">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="content-section active" aria-labelledby="dashboard-title">
+                    <div class="section-header">
+                        <h1 id="dashboard-title">Dashboard</h1>
+                        <p class="section-subtitle">Your legal matters at a glance</p>
+                    </div>
+                    <div class="dashboard-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-folder-open"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="active-cases">3</span>
+                                <span class="stat-label">Active Cases</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-user-tie"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="saved-lawyers">5</span>
+                                <span class="stat-label">Saved Lawyers</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="upcoming-meetings">2</span>
+                                <span class="stat-label">Upcoming Meetings</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="total-spent">₹1,25,000</span>
+                                <span class="stat-label">Total Spent</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-row">
+                        <div class="card recent-cases">
+                            <div class="card-header">
+                                <h3>Recent Cases</h3>
+                                <a href="#lawyers" class="view-all">View All</a>
+                            </div>
+                            <div class="case-list" id="recent-cases-list"></div>
+                        </div>
+                        <div class="card recommended-lawyers">
+                            <div class="card-header">
+                                <h3>Recommended for You</h3>
+                                <a href="#lawyers" class="view-all">View All</a>
+                            </div>
+                            <div class="lawyer-mini-list" id="recommended-lawyers"></div>
+                        </div>
+                    </div>
+                    <div class="card quick-actions">
+                        <div class="card-header"><h3>Quick Actions</h3></div>
+                        <div class="action-grid">
+                            <a href="#lawyers" class="action-btn" data-section="lawyers"><i class="fas fa-search"></i><span>Find a Lawyer</span></a>
+                            <a href="#ai-assistant" class="action-btn" data-section="ai-assistant"><i class="fas fa-robot"></i><span>Ask AI Assistant</span></a>
+                            <a href="#constitution" class="action-btn" data-section="constitution"><i class="fas fa-book"></i><span>Browse Constitution</span></a>
+                            <a href="#case-search" class="action-btn" data-section="case-search"><i class="fas fa-file-alt"></i><span>Search Cases</span></a>
+                            <a href="#complaints" class="action-btn" data-section="complaints"><i class="fas fa-flag"></i><span>File Complaint</span></a>
+                            <a href="#courts" class="action-btn" data-section="courts"><i class="fas fa-map-marker-alt"></i><span>Find Courts</span></a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Find Lawyers Section -->
+                <section id="lawyers" class="content-section" aria-labelledby="lawyers-title">
+                    <div class="section-header">
+                        <h1 id="lawyers-title">Find Lawyers</h1>
+                        <p class="section-subtitle">Discover top-rated legal professionals across all categories</p>
+                    </div>
+                    <div class="lawyers-layout">
+                        <aside class="filters-panel" id="filters-panel">
+                            <div class="filter-section">
+                                <h4><i class="fas fa-tags"></i> Practice Areas</h4>
+                                <div class="filter-chips" id="category-chips"></div>
+                            </div>
+                            <div class="filter-section">
+                                <h4><i class="fas fa-map-marker-alt"></i> Location</h4>
+                                <input type="text" class="filter-input" id="location-filter" placeholder="City, State, or Pin Code">
+                                <div class="location-suggestions" id="location-suggestions"></div>
+                            </div>
+                            <div class="filter-section">
+                                <h4><i class="fas fa-star"></i> Minimum Rating</h4>
+                                <div class="rating-filter">
+                                    <input type="range" id="rating-slider" min="0" max="5" step="0.5" value="0">
+                                    <span id="rating-value">Any Rating</span>
+                                </div>
+                            </div>
+                            <div class="filter-section">
+                                <h4><i class="fas fa-rupee-sign"></i> Fee Range (per hearing)</h4>
+                                <div class="range-slider">
+                                    <input type="range" id="fee-min" min="0" max="50000" value="0">
+                                    <input type="range" id="fee-max" min="0" max="50000" value="50000">
+                                    <div class="range-values">
+                                        <span id="fee-min-value">₹0</span>
+                                        <span id="fee-max-value">₹50,000+</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter-section">
+                                <h4><i class="fas fa-user-check"></i> Lawyer Type</h4>
+                                <label class="checkbox-wrapper"><input type="checkbox" name="lawyer-type" value="private" checked> Private Lawyers</label>
+                                <label class="checkbox-wrapper"><input type="checkbox" name="lawyer-type" value="government" checked> Government Lawyers</label>
+                                <label class="checkbox-wrapper"><input type="checkbox" name="lawyer-type" value="pro-bono"> Pro Bono</label>
+                            </div>
+                            <div class="filter-section">
+                                <h4><i class="fas fa-clock"></i> Availability</h4>
+                                <label class="checkbox-wrapper"><input type="checkbox" id="available-now"> Available Now</label>
+                                <label class="checkbox-wrapper"><input type="checkbox" id="available-today"> Available Today</label>
+                                <label class="checkbox-wrapper"><input type="checkbox" id="available-week"> Available This Week</label>
+                            </div>
+                            <div class="filter-section">
+                                <h4><i class="fas fa-sort"></i> Sort By</h4>
+                                <select id="sort-by" class="filter-select">
+                                    <option value="rating">Highest Rated</option>
+                                    <option value="win-rate">Win Rate</option>
+                                    <option value="experience">Most Experienced</option>
+                                    <option value="fee-low">Lowest Fee</option>
+                                    <option value="fee-high">Highest Fee</option>
+                                    <option value="recent">Most Recent</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-secondary btn-clear-filters" id="clear-filters">Clear All Filters</button>
+                        </aside>
+                        <div class="lawyers-results">
+                            <div class="results-header">
+                                <div class="results-count"><span id="results-count">0</span> lawyers found</div>
+                                <div class="view-toggle">
+                                    <button class="view-btn active" data-view="grid" aria-label="Grid View"><i class="fas fa-th"></i></button>
+                                    <button class="view-btn" data-view="list" aria-label="List View"><i class="fas fa-list"></i></button>
+                                </div>
+                            </div>
+                            <div class="lawyers-grid" id="lawyers-grid"></div>
+                            <div class="pagination" id="pagination"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lawyer Profile Modal -->
+                <div id="lawyer-profile-modal" class="modal profile-modal">
+                    <div class="modal-backdrop"></div>
+                    <div class="modal-content profile-content">
+                        <button class="modal-close" aria-label="Close Profile"><i class="fas fa-times"></i></button>
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <img id="profile-avatar" src="" alt="">
+                                <span class="profile-type-badge" id="profile-type-badge"></span>
+                            </div>
+                            <div class="profile-basic">
+                                <h2 id="profile-name"></h2>
+                                <div class="profile-meta">
+                                    <span class="profile-category" id="profile-category"></span>
+                                    <span class="profile-location" id="profile-location"></span>
+                                    <span class="profile-experience" id="profile-experience"></span>
+                                </div>
+                                <div class="profile-rating">
+                                    <div class="stars" id="profile-stars"></div>
+                                    <span class="rating-value" id="profile-rating-value"></span>
+                                    <span class="review-count" id="profile-review-count"></span>
+                                </div>
+                            </div>
+                            <div class="profile-actions">
+                                <button class="btn btn-primary" id="book-consultation"><i class="fas fa-calendar-plus"></i> Book Consultation</button>
+                                <button class="btn btn-secondary" id="save-lawyer"><i class="fas fa-bookmark"></i> Save</button>
+                                <button class="btn btn-secondary" id="share-lawyer"><i class="fas fa-share"></i> Share</button>
+                            </div>
+                        </div>
+                        <nav class="profile-tabs">
+                            <button class="profile-tab active" data-tab="overview">Overview</button>
+                            <button class="profile-tab" data-tab="cases">Case History</button>
+                            <button class="profile-tab" data-tab="fees">Fee Structure</button>
+                            <button class="profile-tab" data-tab="availability">Availability</button>
+                            <button class="profile-tab" data-tab="reviews">Reviews</button>
+                        </nav>
+                        <div class="profile-tab-content">
+                            <div id="tab-overview" class="tab-panel active">
+                                <div class="overview-grid">
+                                    <div class="overview-card">
+                                        <h4>Qualifications</h4>
+                                        <ul id="profile-qualifications"></ul>
+                                    </div>
+                                    <div class="overview-card">
+                                        <h4>Specializations</h4>
+                                        <div class="specialization-tags" id="profile-specializations"></div>
+                                    </div>
+                                    <div class="overview-card">
+                                        <h4>Bar Council Registration</h4>
+                                        <p id="profile-bar-council"></p>
+                                    </div>
+                                    <div class="overview-card">
+                                        <h4>Languages</h4>
+                                        <div class="language-tags" id="profile-languages"></div>
+                                    </div>
+                                </div>
+                                <div class="overview-card full-width">
+                                    <h4>About</h4>
+                                    <p id="profile-bio"></p>
+                                </div>
+                            </div>
+                            <div id="tab-cases" class="tab-panel">
+                                <div class="case-stats">
+                                    <div class="case-stat"><span id="total-cases">0</span><label>Total Cases</label></div>
+                                    <div class="case-stat"><span id="won-cases">0</span><label>Won</label></div>
+                                    <div class="case-stat"><span id="lost-cases">0</span><label>Lost</label></div>
+                                    <div class="case-stat"><span id="pending-cases">0</span><label>Pending</label></div>
+                                    <div class="case-stat highlight"><span id="win-rate">0%</span><label>Win Rate</label></div>
+                                </div>
+                                <div class="case-category-breakdown" id="case-breakdown"></div>
+                                <table class="cases-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Case Title</th>
+                                            <th>Category</th>
+                                            <th>Court</th>
+                                            <th>Year</th>
+                                            <th>Result</th>
+                                            <th>Role</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cases-table-body"></tbody>
+                                </table>
+                            </div>
+                            <div id="tab-fees" class="tab-panel">
+                                <div class="fee-structure" id="fee-structure"></div>
+                            </div>
+                            <div id="tab-availability" class="tab-panel">
+                                <div class="availability-calendar" id="availability-calendar"></div>
+                            </div>
+                            <div id="tab-reviews" class="tab-panel">
+                                <div class="reviews-list" id="reviews-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Legal Assistant Section -->
+                <section id="ai-assistant" class="content-section" aria-labelledby="ai-title">
+                    <div class="section-header">
+                        <h1 id="ai-title">AI Legal Assistant</h1>
+                        <p class="section-subtitle">Get instant legal guidance powered by advanced AI</p>
+                    </div>
+                    <div class="ai-assistant-layout">
+                        <div class="ai-chat-container">
+                            <div class="chat-header">
+                                <div class="ai-avatar"><i class="fas fa-robot"></i></div>
+                                <div class="ai-info">
+                                    <h3>LegalAI Assistant</h3>
+                                    <span class="ai-status">Online • Multilingual Support</span>
+                                </div>
+                                <div class="chat-actions">
+                                    <button class="btn btn-icon" id="voice-input-btn" aria-label="Voice Input"><i class="fas fa-microphone"></i></button>
+                                    <button class="btn btn-icon" id="clear-chat-btn" aria-label="Clear Chat"><i class="fas fa-trash"></i></button>
+                                    <button class="btn btn-icon" id="chat-settings-btn" aria-label="Settings"><i class="fas fa-cog"></i></button>
+                                </div>
+                            </div>
+                            <div class="chat-messages" id="chat-messages">
+                                <div class="message ai-message">
+                                    <div class="message-avatar"><i class="fas fa-robot"></i></div>
+                                    <div class="message-content">
+                                        <p>Hello! I'm your AI Legal Assistant. I can help you with:</p>
+                                        <ul>
+                                            <li>Legal questions & explanations</li>
+                                            <li>Finding relevant laws & sections</li>
+                                            <li>Case law research</li>
+                                            <li>Document drafting guidance</li>
+                                            <li>Procedure explanations</li>
+                                            <li>Multi-language support (100+ languages)</li>
+                                        </ul>
+                                        <p>How can I assist you today?</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-suggestions" id="chat-suggestions">
+                                <button class="suggestion-chip" data-query="Explain Section 420 IPC">Section 420 IPC</button>
+                                <button class="suggestion-chip" data-query="Divorce procedure in India">Divorce Procedure</button>
+                                <button class="suggestion-chip" data-query="Consumer court complaint process">Consumer Complaint</button>
+                                <button class="suggestion-chip" data-query="Property registration steps">Property Registration</button>
+                                <button class="suggestion-chip" data-query="Bail application process">Bail Application</button>
+                                <button class="suggestion-chip" data-query="RTI filing procedure">RTI Filing</button>
+                            </div>
+                            <div class="chat-input-area">
+                                <div class="input-wrapper">
+                                    <textarea id="chat-input" placeholder="Ask your legal question... (Supports 100+ languages)" rows="1"></textarea>
+                                    <button class="btn btn-primary" id="send-message" aria-label="Send Message"><i class="fas fa-paper-plane"></i></button>
+                                </div>
+                                <div class="input-options">
+                                    <label class="checkbox-wrapper"><input type="checkbox" id="voice-response"> Voice Response</label>
+                                    <label class="checkbox-wrapper"><input type="checkbox" id="cite-sources"> Cite Sources</label>
+                                    <select id="response-language" class="filter-select" style="width: auto;">
+                                        <option value="auto">Auto Detect</option>
+                                        <option value="en">English</option>
+                                        <option value="hi">Hindi</option>
+                                        <option value="ta">Tamil</option>
+                                        <option value="te">Telugu</option>
+                                        <option value="bn">Bengali</option>
+                                        <option value="mr">Marathi</option>
+                                        <option value="gu">Gujarati</option>
+                                        <option value="kn">Kannada</option>
+                                        <option value="ml">Malayalam</option>
+                                        <option value="pa">Punjabi</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <aside class="ai-sidebar">
+                            <div class="sidebar-card">
+                                <h4><i class="fas fa-history"></i> Recent Conversations</h4>
+                                <div class="conversation-list" id="conversation-list"></div>
+                            </div>
+                            <div class="sidebar-card">
+                                <h4><i class="fas fa-bookmark"></i> Saved Responses</h4>
+                                <div class="saved-list" id="saved-responses"></div>
+                            </div>
+                            <div class="sidebar-card">
+                                <h4><i class="fas fa-lightbulb"></i> Popular Topics</h4>
+                                <div class="topic-tags" id="popular-topics"></div>
+                            </div>
+                        </aside>
+                    </div>
+                </section>
+
+                <!-- Constitution Library Section -->
+                <section id="constitution" class="content-section" aria-labelledby="constitution-title">
+                    <div class="section-header">
+                        <h1 id="constitution-title">Constitution of India</h1>
+                        <p class="section-subtitle">Complete legal text with auto-updates for new amendments</p>
+                    </div>
+                    <div class="constitution-layout">
+                        <aside class="constitution-toc">
+                            <div class="toc-search">
+                                <input type="text" id="constitution-search" placeholder="Search articles, schedules, amendments...">
+                            </div>
+                            <div class="toc-filters">
+                                <button class="filter-btn active" data-filter="all">All</button>
+                                <button class="filter-btn" data-filter="parts">Parts</button>
+                                <button class="filter-btn" data-filter="articles">Articles</button>
+                                <button class="filter-btn" data-filter="schedules">Schedules</button>
+                                <button class="filter-btn" data-filter="amendments">Amendments</button>
+                            </div>
+                            <div class="toc-tree" id="constitution-toc"></div>
+                            <div class="toc-update-notice">
+                                <i class="fas fa-sync-alt"></i>
+                                <span>Last updated: <span id="last-update-date"></span></span>
+                                <button class="btn btn-sm" id="check-updates">Check for Updates</button>
+                            </div>
+                        </aside>
+                        <div class="constitution-content">
+                            <div class="content-header">
+                                <h2 id="article-title">Select an Article or Part</h2>
+                                <div class="content-actions">
+                                    <button class="btn btn-icon" id="bookmark-article" aria-label="Bookmark"><i class="far fa-bookmark"></i></button>
+                                    <button class="btn btn-icon" id="share-article" aria-label="Share"><i class="fas fa-share"></i></button>
+                                    <button class="btn btn-icon" id="print-article" aria-label="Print"><i class="fas fa-print"></i></button>
+                                    <button class="btn btn-icon" id="voice-read" aria-label="Read Aloud"><i class="fas fa-volume-up"></i></button>
+                                </div>
+                            </div>
+                            <div class="article-meta" id="article-meta"></div>
+                            <div class="article-text" id="article-text">
+                                <div class="welcome-message">
+                                    <i class="fas fa-book-open"></i>
+                                    <h3>Welcome to the Constitution Library</h3>
+                                    <p>Select any Part, Article, Schedule, or Amendment from the sidebar to view the complete legal text. Search functionality highlights matching sections within the full paragraph.</p>
+                                    <div class="quick-links">
+                                        <a href="#" data-article="preamble">Preamble</a>
+                                        <a href="#" data-article="article-14">Article 14 - Equality</a>
+                                        <a href="#" data-article="article-19">Article 19 - Freedom</a>
+                                        <a href="#" data-article="article-21">Article 21 - Life & Liberty</a>
+                                        <a href="#" data-article="article-32">Article 32 - Remedies</a>
+                                        <a href="#" data-part="part-iii">Part III - Fundamental Rights</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Case Search Section -->
+                <section id="case-search" class="content-section" aria-labelledby="case-search-title">
+                    <div class="section-header">
+                        <h1 id="case-search-title">Case Law Search</h1>
+                        <p class="section-subtitle">Find relevant case studies with win-rate statistics by category</p>
+                    </div>
+                    <div class="case-search-layout">
+                        <div class="search-panel">
+                            <div class="search-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Case Type / Category</label>
+                                        <select id="case-category" class="filter-select">
+                                            <option value="">All Categories</option>
+                                            <option value="criminal">Criminal</option>
+                                            <option value="civil">Civil</option>
+                                            <option value="family">Family</option>
+                                            <option value="corporate">Corporate</option>
+                                            <option value="constitutional">Constitutional</option>
+                                            <option value="consumer">Consumer Protection</option>
+                                            <option value="labor">Labor & Employment</option>
+                                            <option value="tax">Taxation</option>
+                                            <option value="ipr">Intellectual Property</option>
+                                            <option value="environment">Environmental</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Court Level</label>
+                                        <select id="court-level" class="filter-select">
+                                            <option value="">All Courts</option>
+                                            <option value="supreme">Supreme Court</option>
+                                            <option value="high-court">High Courts</option>
+                                            <option value="district">District Courts</option>
+                                            <option value="tribunal">Tribunals</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Keywords</label>
+                                        <input type="text" id="case-keywords" placeholder="Legal terms, section numbers, party names...">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Year Range</label>
+                                        <div class="year-range">
+                                            <input type="number" id="year-from" placeholder="From" min="1950" max="2026">
+                                            <span>to</span>
+                                            <input type="number" id="year-to" placeholder="To" min="1950" max="2026">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Minimum Win Rate</label>
+                                        <input type="range" id="win-rate-filter" min="0" max="100" value="0">
+                                        <span id="win-rate-value">Any</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Sort By</label>
+                                        <select id="case-sort" class="filter-select">
+                                            <option value="relevance">Relevance</option>
+                                            <option value="win-rate">Win Rate</option>
+                                            <option value="date">Most Recent</option>
+                                            <option value="citations">Most Cited</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary btn-search" id="search-cases"><i class="fas fa-search"></i> Search Cases</button>
+                            </div>
+                            <div class="search-stats" id="search-stats">
+                                <h4>Category Statistics</h4>
+                                <div class="stats-grid" id="category-stats"></div>
+                            </div>
+                        </div>
+                        <div class="case-results">
+                            <div class="results-header">
+                                <span id="case-results-count">0 cases found</span>
+                                <select id="results-per-page" class="filter-select" style="width: auto;">
+                                    <option value="10">10 per page</option>
+                                    <option value="25">25 per page</option>
+                                    <option value="50">50 per page</option>
+                                </select>
+                            </div>
+                            <div class="case-cards" id="case-cards"></div>
+                            <div class="pagination" id="case-pagination"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- AI Call Bot Section -->
+                <section id="call-bot" class="content-section" aria-labelledby="call-bot-title">
+                    <div class="section-header">
+                        <h1 id="call-bot-title">AI Call Bot</h1>
+                        <p class="section-subtitle">Intelligent call screening, intake & forwarding for legal professionals</p>
+                    </div>
+                    <div class="call-bot-layout">
+                        <div class="call-bot-main">
+                            <div class="bot-status-card">
+                                <div class="status-indicator">
+                                    <span class="status-dot active"></span>
+                                    <span>Bot Active</span>
+                                </div>
+                                <div class="status-metrics">
+                                    <div class="metric"><span id="calls-today">0</span><label>Calls Today</label></div>
+                                    <div class="metric"><span id="calls-forwarded">0</span><label>Forwarded</label></div>
+                                    <div class="metric"><span id="calls-resolved">0</span><label>Auto-Resolved</label></div>
+                                    <div class="metric"><span id="avg-duration">0s</span><label>Avg Duration</label></div>
+                                </div>
+                            </div>
+                            <div class="call-simulation">
+                                <h3>Call Simulator</h3>
+                                <div class="simulator-controls">
+                                    <select id="caller-type" class="filter-select">
+                                        <option value="new-client">New Client Inquiry</option>
+                                        <option value="existing-client">Existing Client</option>
+                                        <option value="court-notice">Court Notice</option>
+                                        <option value="opposing-counsel">Opposing Counsel</option>
+                                        <option value="spam">Spam/Marketing</option>
+                                    </select>
+                                    <select id="caller-language" class="filter-select">
+                                        <option value="en">English</option>
+                                        <option value="hi">Hindi</option>
+                                        <option value="ta">Tamil</option>
+                                        <option value="te">Telugu</option>
+                                        <option value="bn">Bengali</option>
+                                    </select>
+                                    <button class="btn btn-primary" id="simulate-call"><i class="fas fa-phone"></i> Simulate Incoming Call</button>
+                                </div>
+                                <div class="call-transcript" id="call-transcript">
+                                    <div class="transcript-empty">Click "Simulate Incoming Call" to see the AI bot in action</div>
+                                </div>
+                            </div>
+                            <div class="bot-configuration">
+                                <h3>Bot Configuration</h3>
+                                <div class="config-tabs">
+                                    <button class="config-tab active" data-config="intake">Intake Questions</button>
+                                    <button class="config-tab" data-config="forwarding">Forwarding Rules</button>
+                                    <button class="config-tab" data-config="responses">Auto Responses</button>
+                                    <button class="config-tab" data-config="languages">Languages</button>
+                                </div>
+                                <div class="config-panels">
+                                    <div id="config-intake" class="config-panel active">
+                                        <div class="intake-questions" id="intake-questions"></div>
+                                        <button class="btn btn-secondary" id="add-intake-question"><i class="fas fa-plus"></i> Add Question</button>
+                                    </div>
+                                    <div id="config-forwarding" class="config-panel">
+                                        <div class="forwarding-rules" id="forwarding-rules"></div>
+                                        <button class="btn btn-secondary" id="add-forwarding-rule"><i class="fas fa-plus"></i> Add Rule</button>
+                                    </div>
+                                    <div id="config-responses" class="config-panel">
+                                        <div class="auto-responses" id="auto-responses"></div>
+                                        <button class="btn btn-secondary" id="add-auto-response"><i class="fas fa-plus"></i> Add Response</button>
+                                    </div>
+                                    <div id="config-languages" class="config-panel">
+                                        <div class="language-support" id="language-support"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <aside class="call-bot-sidebar">
+                            <div class="sidebar-card">
+                                <h4><i class="fas fa-history"></i> Recent Calls</h4>
+                                <div class="call-log" id="call-log"></div>
+                            </div>
+                            <div class="sidebar-card">
+                                <h4><i class="fas fa-chart-bar"></i> Analytics</h4>
+                                <div class="analytics-mini" id="analytics-mini"></div>
+                            </div>
+                        </aside>
+                    </div>
+                </section>
+
+                <!-- Complaints Portal Section -->
+                <section id="complaints" class="content-section" aria-labelledby="complaints-title">
+                    <div class="section-header">
+                        <h1 id="complaints-title">Complaint & Grievance Portal</h1>
+                        <p class="section-subtitle">Report lawyer misconduct with evidence support - especially for government lawyers</p>
+                    </div>
+                    <div class="complaints-layout">
+                        <div class="complaints-main">
+                            <div class="complaint-form-card">
+                                <h3>File New Complaint</h3>
+                                <form id="complaint-form" class="complaint-form">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Lawyer Name *</label>
+                                            <input type="text" id="complaint-lawyer-name" placeholder="Enter lawyer's full name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Lawyer Type *</label>
+                                            <select id="complaint-lawyer-type" class="filter-select" required>
+                                                <option value="">Select Type</option>
+                                                <option value="government">Government Lawyer</option>
+                                                <option value="private">Private Lawyer</option>
+                                                <option value="public-prosecutor">Public Prosecutor</option>
+                                                <option value="legal-aid">Legal Aid Lawyer</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Bar Council Registration Number</label>
+                                        <input type="text" id="complaint-bar-number" placeholder="If known">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Case Details</label>
+                                        <textarea id="complaint-case-details" placeholder="Case number, court, dates, brief description..." rows="3"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Complaint Category *</label>
+                                        <select id="complaint-category" class="filter-select" required>
+                                            <option value="">Select Category</option>
+                                            <option value="negligence">Negligence / Non-performance</option>
+                                            <option value="fee-collection">Collecting Fees Without Service</option>
+                                            <option value="misconduct">Professional Misconduct</option>
+                                            <option value="delay">Unreasonable Delays</option>
+                                            <option value="conflict">Conflict of Interest</option>
+                                            <option value="incompetence">Incompetence</option>
+                                            <option value="communication">Failure to Communicate</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Detailed Description *</label>
+                                        <textarea id="complaint-description" placeholder="Describe the issue in detail..." rows="5" required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Evidence & Supporting Documents</label>
+                                        <div class="file-upload" id="evidence-upload">
+                                            <input type="file" id="evidence-files" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt" hidden>
+                                            <div class="upload-area">
+                                                <i class="fas fa-cloud-upload-alt"></i>
+                                                <p>Drag & drop files here or <span class="browse-link">browse</span></p>
+                                                <small>Supported: PDF, JPG, PNG, DOC, DOCX, TXT (Max 10MB each)</small>
+                                            </div>
+                                            <div class="uploaded-files" id="uploaded-files"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="checkbox-wrapper">
+                                            <input type="checkbox" id="complaint-anonymous" required> I confirm this complaint is truthful and accurate
+                                        </label>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="button" class="btn btn-secondary" id="save-draft">Save as Draft</button>
+                                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Complaint</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="complaint-tracking">
+                                <h3>Track Your Complaints</h3>
+                                <div class="complaint-filters">
+                                    <button class="filter-chip active" data-status="all">All</button>
+                                    <button class="filter-chip" data-status="submitted">Submitted</button>
+                                    <button class="filter-chip" data-status="under-review">Under Review</button>
+                                    <button class="filter-chip" data-status="investigation">Investigation</button>
+                                    <button class="filter-chip" data-status="resolved">Resolved</button>
+                                    <button class="filter-chip" data-status="dismissed">Dismissed</button>
+                                </div>
+                                <div class="complaint-list" id="complaint-list"></div>
+                            </div>
+                        </div>
+                        <aside class="complaints-sidebar">
+                            <div class="sidebar-card">
+                                <h4><i class="fas fa-shield-alt"></i> Government Lawyer Flagging</h4>
+                                <p>Our system automatically flags government lawyers with:</p>
+                                <ul class="flag-indicators">
+                                    <li><i class="fas fa-check"></i> Multiple fee collections without case progress</li>
+                                    <li><i class="fas fa-check"></i> High complaint-to-case ratio</li>
+                                    <li><i class="fas fa-check"></i> Extended inactivity periods</li>
+                                    <li><i class="fas fa-check"></i> Pattern of case withdrawals</li>
+                                </ul>
+                                <button class="btn btn-primary btn-sm" id="view-flagged">View Flagged Lawyers</button>
+                            </div>
+                            <div class="sidebar-card">
+                                <h4><i class="fas fa-info-circle"></i> Complaint Process</h4>
+                                <ol class="process-steps">
+                                    <li>Submit complaint with evidence</li>
+                                    <li>Automated acknowledgment (24 hrs)</li>
+                                    <li>Preliminary review (7 days)</li>
+                                    <li>Investigation if warranted (30 days)</li>
+                                    <li>Resolution & action taken</li>
+                                </ol>
+                            </div>
+                            <div class="sidebar-card">
+                                <h4><i class="fas fa-chart-line"></i> Statistics</h4>
+                                <div class="stat-mini">
+                                    <div class="stat-mini-item"><span id="total-complaints">0</span><label>Total Filed</label></div>
+                                    <div class="stat-mini-item"><span id="resolved-complaints">0</span><label>Resolved</label></div>
+                                    <div class="stat-mini-item"><span id="govt-lawyer-complaints">0</span><label>Govt Lawyers</label></div>
+                                    <div class="stat-mini-item"><span id="avg-resolution">0</span><label>Avg Days</label></div>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+                </section>
+
+                <!-- Courts Finder Section -->
+                <section id="courts" class="content-section" aria-labelledby="courts-title">
+                    <div class="section-header">
+                        <h1 id="courts-title">Find Courts Near You</h1>
+                        <p class="section-subtitle">Locate courts with navigation routes for walking, driving & public transport</p>
+                    </div>
+                    <div class="courts-layout">
+                        <div class="map-container">
+                            <div class="map-controls">
+                                <div class="search-box">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" id="court-search" placeholder="Search courts, areas, or use current location">
+                                    <button class="btn btn-icon" id="use-location" aria-label="Use Current Location"><i class="fas fa-crosshairs"></i></button>
+                                </div>
+                                <div class="map-filters">
+                                    <select id="court-type-filter" class="filter-select">
+                                        <option value="">All Court Types</option>
+                                        <option value="supreme">Supreme Court</option>
+                                        <option value="high-court">High Court</option>
+                                        <option value="district">District Court</option>
+                                        <option value="session">Session Court</option>
+                                        <option value="magistrate">Magistrate Court</option>
+                                        <option value="family">Family Court</option>
+                                        <option value="consumer">Consumer Court</option>
+                                        <option value="labor">Labor Court</option>
+                                        <option value="tribunal">Tribunal</option>
+                                    </select>
+                                    <select id="distance-filter" class="filter-select">
+                                        <option value="10">Within 10 km</option>
+                                        <option value="25">Within 25 km</option>
+                                        <option value="50">Within 50 km</option>
+                                        <option value="100">Within 100 km</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="court-map" class="court-map"></div>
+                            <div class="map-legend">
+                                <div class="legend-item"><span class="legend-color" style="background: #1e3a8a;"></span> Supreme Court</div>
+                                <div class="legend-item"><span class="legend-color" style="background: #dc2626;"></span> High Court</div>
+                                <div class="legend-item"><span class="legend-color" style="background: #ea580c;"></span> District Court</div>
+                                <div class="legend-item"><span class="legend-color" style="background: #16a34a;"></span> Family Court</div>
+                                <div class="legend-item"><span class="legend-color" style="background: #9333ea;"></span> Specialized Courts</div>
+                            </div>
+                        </div>
+                        <div class="courts-list-panel">
+                            <div class="panel-header">
+                                <h3>Nearby Courts</h3>
+                                <button class="btn btn-secondary btn-sm" id="refresh-courts"><i class="fas fa-sync"></i> Refresh</button>
+                            </div>
+                            <div class="courts-list" id="courts-list"></div>
+                        </div>
+                    </div>
+                    <div class="court-detail-modal-area" id="court-detail-area"></div>
+                </section>
+
+                <!-- Notifications Panel -->
+                <div id="notifications-panel" class="side-panel">
+                    <div class="panel-header">
+                        <h3>Notifications</h3>
+                        <button class="panel-close" aria-label="Close"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="notification-tabs">
+                        <button class="notif-tab active" data-tab="all">All</button>
+                        <button class="notif-tab" data-tab="cases">Cases</button>
+                        <button class="notif-tab" data-tab="appointments">Appointments</button>
+                        <button class="notif-tab" data-tab="system">System</button>
+                    </div>
+                    <div class="notification-list" id="notification-list"></div>
+                </div>
+
+                <!-- Settings Panel -->
+                <div id="settings-panel" class="side-panel">
+                    <div class="panel-header">
+                        <h3>Settings</h3>
+                        <button class="panel-close" aria-label="Close"><i class="fas fa-times"></i></button>
+                    </div>
+                    <nav class="settings-nav">
+                        <a href="#profile-settings" class="settings-nav-item active"><i class="fas fa-user"></i> Profile</a>
+                        <a href="#notification-settings" class="settings-nav-item"><i class="fas fa-bell"></i> Notifications</a>
+                        <a href="#privacy-settings" class="settings-nav-item"><i class="fas fa-shield-alt"></i> Privacy</a>
+                        <a href="#language-settings" class="settings-nav-item"><i class="fas fa-language"></i> Language</a>
+                        <a href="#accessibility-settings" class="settings-nav-item"><i class="fas fa-universal-access"></i> Accessibility</a>
+                        <a href="#billing-settings" class="settings-nav-item"><i class="fas fa-credit-card"></i> Billing</a>
+                    </nav>
+                    <div class="settings-content" id="settings-content"></div>
+                </div>
+            </main>
+
+            <!-- Floating Action Button -->
+            <button class="fab" id="fab-main" aria-label="Quick Actions">
+                <i class="fas fa-plus"></i>
+            </button>
+            <div class="fab-menu" id="fab-menu">
+                <a href="#lawyers" class="fab-item" data-section="lawyers"><i class="fas fa-user-tie"></i><span>Find Lawyer</span></a>
+                <a href="#ai-assistant" class="fab-item" data-section="ai-assistant"><i class="fas fa-robot"></i><span>Ask AI</span></a>
+                <a href="#complaints" class="fab-item" data-section="complaints"><i class="fas fa-flag"></i><span>File Complaint</span></a>
+                <a href="#courts" class="fab-item" data-section="courts"><i class="fas fa-map-marker-alt"></i><span>Find Court</span></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./data/data.js?v=1"></script>
+    <script src="./js/app.js?v=1"></script>
+</body>
+</html>

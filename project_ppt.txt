@@ -1,0 +1,38 @@
+PPT SLIDE LAYOUT - 6 PAGES (FOR HTML/CSS/JS PROJECT)
+
+PAGE 1: TITLE PAGE
+- AI LAWYER
+- HTML/CSS/JS Project
+- [Your Name]
+
+PAGE 2: IMPORTANT INSTRUCTIONS
+- Follow format exactly
+- Key point names match provided list
+- Legal-themed styling
+- Reference your code structure
+
+PAGE 3: IDEA TITLE
+- AI Lawyer Platform
+- AI-powered legal assistance
+- Access to justice solution
+- Your project overview
+
+PAGE 4: TECHNICAL APPROACH
+- Your: Vanilla ES6 IIFE architecture
+- Datasets: CATEGORIES, LAWYERS, CONSTITUTION, COURT_CASES
+- Features: lawyer filtering, AI assistant, constitution search, case law, call bot, complaints, court map
+- Technologies: LocalStorage, Web Speech API, CSS Variables from styles.css
+
+PAGE 5: FEASIBILITY AND VIABILITY
+- Your project data: 16 lawyers, 50+ cases, full Constitution, 22 courts
+- Technical: Pure vanilla JS, no build tools needed
+- Your code structure: app.js (1728 lines), data.js (600+ lines), styles.css, index.html
+- Scope: Delhi courts + 4 High Courts
+- User Flow: Your DOMContentLoaded initialization
+- Sustainability: Your LocalStorage persistence
+
+PAGE 6: IMPACT AND BENEFITS / RESEARCH AND REFERENCES
+- Title: RESEARCH AND REFERENCES
+- Page blank for later reference addition
+- Or: Impact - your project solves real access-to-justice problem
+- Benefits matching your 10 features

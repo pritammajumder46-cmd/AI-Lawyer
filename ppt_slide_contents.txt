@@ -1,0 +1,67 @@
+PPT SLIDE LAYOUT - 6 PAGES
+
+PAGE 1: TITLE PAGE
+- Title: AI LAWYER
+- Subtitle: Premium Legal Intelligence Platform
+- Presented by: [Your Name/Organization]
+- Date: [Current Date]
+- Visual: AI lawyer concept illustration or blind scales with digital interface
+
+PAGE 2: IMPORTANT INSTRUCTIONS
+- Follow the given format exactly
+- Key points names must be same as provided
+- Maintain consistent styling throughout
+- Use professional legal theme colors (indigo, gold accents)
+- Ensure readability across all slides
+- Font: Inter/Space Grotesk as per project design
+
+PAGE 3: IDEA TITLE
+- Main Topic: AI Lawyer
+- Core Concept: AI-powered legal assistance platform
+- Target Problem: Access to justice and lawyer availability
+- Key Features Overview
+- Visual: Platform overview diagram
+
+PAGE 4: TECHNICAL APPROACH
+- Architecture: Vanilla ES6 IIFE module pattern
+- Data Structure: CATEGORIES, LAWYERS, COURT_CASES, CONSTITUTION datasets
+- Features Implementation:
+  * Lawyer filtering system (categories, location, rating, fee, availability)
+  * AI Legal Assistant with knowledge base
+  * Constitution Library with search/filtering
+  * Case Law Search with pagination
+  * AI Call Bot with configurable scripts
+  * Complaints Portal with evidence upload
+  * Court Finder with GPS/map integration
+- Technologies: LocalStorage, Web Speech API, CSS Variables, FontAwesome
+- Visual: System architecture diagram
+
+PAGE 5: FEASIBILITY AND VIABILITY
+- Data Availability: 16 lawyers, 50+ case laws, full Constitution, 22 courts
+- Technical Feasibility: Pure vanilla JS, no build tools required
+- Market Viability: Addresses real access-to-justice problem
+- Scope: Delhi courts + 4 major High Courts initially
+- User Flow: Login → Search Lawyer → View Profile → AI Assistant → Book Consultation
+- Sustainability: Local data, periodic constitution updates
+- Visual: Timeline/roadmap diagram
+
+PAGE 6: IMPACT AND BENEFITS [NOTHING WRITTEN - TITLE ONLY]
+- Or: RESEARCH AND REFERENCES
+- Title: RESEARCH AND REFERENCES
+- Instruction: Page will be created where nothing will be written but the title RESEARCH AND REFERENCES must be written there
+- Note: User will add references later
+- Visual: Blank space with "RESEARCH AND REFERENCES" centered title
+
+ALTERNATIVE PAGE 6: IMPACT AND BENEFITS
+- Impact:
+  * Reduced lawyer search time from hours to minutes
+  * Transparent fee structures prevent overcharging
+  * Accessible court information improves litigant preparedness
+  * Constitution literacy increases citizen awareness
+  * Complaint mechanism holds lawyers accountable
+  * Multi-language support increases accessibility
+- Benefits:
+  * For Users: Cost-effective, convenient, informed decisions
+  * For Lawyers: Increased visibility, transparent operations
+  * For Justice System: Reduced adjournments, better prepared litigants
+- Visual: Infographic showing before/after scenarios

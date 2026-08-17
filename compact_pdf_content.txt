@@ -1,0 +1,31 @@
+AI LAWYER - KEY POINTS
+
+PROBLEMS:
+1. Finding lawyer in emergencies is hard; exorbitant fees charged
+2. Government lawyers collect fees without fighting cases
+3. Lawyer availability/schedules not accessible
+4. Users unaware of nearby courts
+5. Lawyers cannot memorize all laws
+6. Finding case studies requires significant effort
+7. Negligent government lawyers cause case losses
+
+SOLUTIONS:
+1. Lawyer profiles with case history, wins/losses, star ratings (best to average)
+2. System analyzes govt lawyers to detect fee-collectors without case activity
+3. Real-time availability: free slots listed, booked as "occupied"
+4. Location access shows courts on map with shortest routes (walk/drive/transit)
+5. Indian Constitution section with full legal text; search highlights within paragraphs
+6. Case-type search surfaces relevant case studies for research/preparation
+7. Complaint portal for reporting lawyers with evidence submission
+
+APP FEATURES:
+1. User Login Page
+2. Lawyer Profiles with qualifications, case history, track records
+3. AI Legal Assistant
+4. Multilingual Voice Support (all languages)
+5. Category-wise Classification (Criminal, Civil, Family, Corporate)
+6. Transparent Fee Structure on profiles
+7. Case-Type Search with win-rate stats & star ratings
+8. AI Call Bot (screens calls, intake, forwards when necessary)
+9. Auto-Update Constitutional Library (new amendments added automatically)
+10. Complaint/Grievance Portal (evidence submission support for govt lawyers)

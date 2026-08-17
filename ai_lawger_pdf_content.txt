@@ -1,0 +1,35 @@
+AI LAWYER - Presentation Content
+
+KEY POINTS (Problems):
+1. Finding a lawyer during emergencies is difficult. Even when one is found, they often charge exorbitant fees. Having multiple options would make it more convenient for users.
+2. Government lawyers often collect fees without actually fighting the case. This should be detectable/flagged.
+3. Knowing lawyers' availability/schedules is problematic. This information should be accessible.
+4. Users often don't know about nearby courts. Finding them is difficult.
+5. It's not possible for lawyers to remember all laws at all times.
+6. Finding relevant case studies requires significant effort.
+7. If a user doesn't get help from a government lawyer, they lose the case due to that lawyer's negligence.
+
+SOLUTIONS (Features):
+1. The app will contain profiles of all lawyers (from best to average), including their case history (wins/losses) and star ratings based on performance, making it easy to find the right lawyer.
+2. The app will feature both government and private lawyer profiles. The system will analyze government lawyers to detect those who collect fees without actively fighting cases.
+3. Users can easily view lawyers' real-time availability. Free schedules will be listed, and booked slots will show as "occupied."
+4. Since users are often unaware of nearby courts, the app will use location access to display them on a map with the shortest routes—offering separate navigation paths for walking, driving, etc.
+5. Lawyers can't memorize all laws. The app will include an Indian Constitution section with full legal text. Searching a specific section will highlight it within the full paragraph.
+6. Searching by case type will surface relevant case studies, aiding lawyers in research and preparation.
+7. Users can file formal complaints against government lawyers with supporting evidence if the lawyer fails to provide adequate assistance.
+
+APP FEATURES:
+1. User Login Page
+2. Lawyer Profiles with qualifications, case history, and detailed track records
+3. AI Legal Assistant
+4. Multilingual Voice Support (all languages)
+5. Category-wise Classification (e.g., Criminal, Civil, Family, Corporate lawyers)
+6. Transparent Fee Structure visible on lawyer profiles
+7. Case-Type Search with lawyer win-rate statistics and star ratings per case category
+8. AI Call Bot that screens incoming calls, handles initial intake, and forwards to the lawyer only when necessary
+9. Auto-Update Constitutional Library — new amendments/laws are automatically added to the app's Constitution section
+10. Complaint/Grievance Portal for reporting lawyers (especially government lawyers) with evidence submission support
+
+PDF FORMAT REQUIREMENT:
+- Exact format matching the provided demo PDF
+- Key points names must be same as listed above

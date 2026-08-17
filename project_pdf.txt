@@ -1,0 +1,33 @@
+AI LAWYER PROJECT - PDF FORMAT
+
+KEY PROBLEMS (7 points):
+1. Emergency lawyer finding is hard; exorbitant fees charged
+2. Govt lawyers collect fees without fighting cases
+3. Lawyer availability/schedules not accessible
+4. Users unaware of nearby courts
+5. Lawyers cannot memorize all laws
+6. Finding case studies requires significant effort
+7. Negligent govt lawyers cause case losses
+
+KEY SOLUTIONS (7 points):
+1. Lawyer profiles with case history, wins/losses, star ratings
+2. System detects govt lawyers who collect fees without activity
+3. Real-time availability: free slots listed, booked as "occupied"
+4. Location access shows courts on map with shortest routes (walk/drive)
+5. Indian Constitution with full legal text; search highlights within paragraphs
+6. Case-type search surfaces relevant case studies for research
+7. Complaint portal for reporting lawyers with evidence submission
+
+YOUR 10 APP FEATURES:
+1. User Login Page
+2. Lawyer Profiles with qualifications, case history, track records
+3. AI Legal Assistant
+4. Multilingual Voice Support (all languages)
+5. Category-wise Classification (Criminal, Civil, Family, Corporate)
+6. Transparent Fee Structure on profiles
+7. Case-Type Search with win-rate stats & star ratings
+8. AI Call Bot (screens calls, intake, forwards when necessary)
+9. Auto-Update Constitutional Library (new amendments added automatically)
+10. Complaint/Grievance Portal (evidence submission for govt lawyers)
+
+TECHNICAL: Vanilla ES6 JS, LocalStorage, Web Speech API, CSS Variables, FontAwesome. 16 lawyers, 50+ cases, full Constitution, 22 courts.

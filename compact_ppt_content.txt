@@ -1,0 +1,38 @@
+PPT SLIDE LAYOUT - 6 PAGES (COMPACT)
+
+PAGE 1: TITLE PAGE
+- AI LAWYER
+- Premium Legal Intelligence Platform
+- [Your Name/Organization]
+
+PAGE 2: IMPORTANT INSTRUCTIONS
+- Follow format exactly
+- Key point names must match provided list
+- Consistent legal-themed styling
+- Professional readability
+
+PAGE 3: IDEA TITLE
+- AI Lawyer
+- AI-powered legal assistance platform
+- Access to justice problem
+- Core features overview
+
+PAGE 4: TECHNICAL APPROACH
+- Vanilla ES6 IIFE architecture
+- Datasets: CATEGORIES, LAWYERS, CONSTITUTION, COURT_CASES
+- Features: lawyer filtering, AI assistant, constitution search, case law, call bot, complaints, court map
+- Technologies: LocalStorage, Web Speech API, CSS Variables
+
+PAGE 5: FEASIBILITY AND VIABILITY
+- 16 lawyers, 50+ cases, full Constitution, 22 courts
+- Pure vanilla JS, no build tools needed
+- Addresses real access-to-justice issue
+- Delhi courts + 4 High Courts initially
+- Flow: Login → Search → Profile → AI → Book
+- Periodic constitution updates
+
+PAGE 6: IMPACT AND BENEFITS / RESEARCH AND REFERENCES
+- Title: RESEARCH AND REFERENCES
+- Page blank for later reference addition
+- Or: Impact - reduced search time, transparent fees, court access, constitution literacy, accountable lawyers, multi-language access
+- Benefits: users (cost-convenient-informed), lawyers (visibility-transparency), justice system (fewer adjournments)
