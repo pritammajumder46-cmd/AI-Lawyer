@@ -38,7 +38,7 @@ const CASE_TYPE_STATS = [
 /* ============ Lawyers ============ */
 const LAWYERS = [
     {
-        id: "lw-001", name: "Adv. Rajesh Sharma", type: "private",
+        id: "lw-001", name: "Adv. Ankita Adhikary", type: "private",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=rajesh",
         categories: ["criminal", "civil"],
         location: { city: "New Delhi", state: "Delhi", area: "Tis Hazari Courts", pin: "110054" },
@@ -274,7 +274,7 @@ const LAWYERS = [
         ]
     },
     {
-        id: "lw-010", name: "Adv. Ishita Banerjee", type: "private",
+        id: "lw-010", name: "Adv. Sreeja Ghosh", type: "private",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=ishita",
         categories: ["ipr", "corporate"],
         location: { city: "Kolkata", state: "West Bengal", area: "Calcutta High Court", pin: "700001" },
