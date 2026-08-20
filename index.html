@@ -3,13 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AI Lawyer - Premium Legal Platform with AI Assistant, Lawyer Profiles, Constitutional Library & More">
-    <title>AI Lawyer | Premium Legal Intelligence Platform</title>
+    <meta name="description" content="Nyaya Guide - Premium Legal Platform with AI Assistant, Lawyer Profiles, Constitutional Library & More">
+    <title>Nyaya Guide | Premium Legal Intelligence Platform</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/styles.css?v=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Small local styles for Practice card -->
+    <style>
+        .practice-card .card-header h3 { display:flex; align-items:center; gap:10px; margin:0; font-size:16px }
+        .practice-card .practice-badge { background:var(--accent); color:#fff; padding:6px 10px; border-radius:999px; font-size:13px; display:inline-flex; align-items:center; gap:8px }
+        .practice-card .practice-history li .ph-score { background:rgba(0,0,0,0.06); padding:4px 6px; border-radius:6px; font-size:12px }
+        .practice-card .practice-history { max-height:120px; overflow:auto }
+        .practice-card .btn { font-size:13px }
+        .practice-card p { font-size:13px }
+    </style>
 </head>
 <body>
     <div class="app-container">
@@ -35,7 +44,7 @@
                     <div class="login-logo">
                         <svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="28" fill="none" stroke="currentColor" stroke-width="2"/><path d="M18 30 L27 39 L42 21" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </div>
-                    <h1>Welcome to AI Lawyer</h1>
+                    <h1>Welcome to Nyaya Guide</h1>
                     <p>Your Premium Legal Intelligence Platform</p>
                 </div>
                 <div class="login-tabs">
@@ -54,6 +63,12 @@
                             <input type="password" id="password" placeholder="Enter password" required>
                             <button type="button" class="toggle-password"><i class="fas fa-eye"></i></button>
                         </div>
+                    </div>
+                    <!-- Bar Council / Registration Number (visible only for lawyers) -->
+                    <div class="form-group" id="bar-group" style="display:none">
+                        <label for="bar-number">Bar Council Registration No.</label>
+                        <input type="text" id="bar-number" placeholder="Enter your Bar Council / Enrollment number">
+                        <small style="display:block;margin-top:6px;color:var(--text-3);font-size:12px">Lawyers: provide registration number to enable Practice Session access.</small>
                     </div>
                     <div class="form-options">
                         <label class="checkbox-wrapper">
@@ -79,7 +94,7 @@
                 <div class="nav-brand">
                     <a href="#" class="brand-link">
                         <svg class="brand-icon" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 20 L18 26 L28 14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        <span class="brand-text">AI Lawyer</span>
+                        <span class="brand-text">Nyaya Guide</span>
                     </a>
                 </div>
                 <nav class="nav-main" role="navigation">
@@ -90,6 +105,7 @@
                         <li><a href="#constitution" class="nav-link" data-section="constitution"><i class="fas fa-book"></i> Constitution</a></li>
                         <li><a href="#case-search" class="nav-link" data-section="case-search"><i class="fas fa-search"></i> Case Search</a></li>
                         <li><a href="#call-bot" class="nav-link" data-section="call-bot"><i class="fas fa-phone"></i> AI Call Bot</a></li>
+                        <li><a href="#practice" class="nav-link" data-section="practice" style="display:none"><i class="fas fa-play-circle"></i> Practice</a></li>
                         <li><a href="#complaints" class="nav-link" data-section="complaints"><i class="fas fa-flag"></i> Complaints</a></li>
                         <li><a href="#courts" class="nav-link" data-section="courts"><i class="fas fa-map-marker-alt"></i> Courts</a></li>
                     </ul>
@@ -208,6 +224,25 @@
                             <a href="#courts" class="action-btn" data-section="courts"><i class="fas fa-map-marker-alt"></i><span>Find Courts</span></a>
                         </div>
                     </div>
+                    <!-- Practice quick card (visible to lawyers only) -->
+                    <div id="practice-card" class="card practice-card" style="display:none;cursor:pointer">
+                        <div class="card-header" style="display:flex;align-items:center;justify-content:space-between">
+                            <h3><i class="fas fa-chalkboard-teacher" style="font-size:18px;color:var(--accent)"></i> Practice Room</h3>
+                            <div id="practice-badge" class="practice-badge" style="display:none">Last: <span id="practice-badge-score">0</span>/100</div>
+                        </div>
+                        <div style="padding:14px">
+                            <p style="margin:0 0 10px;color:var(--text-2)">Rehearse openings & arguments with an AI coach. Try a timed session, evaluate, and save notes.</p>
+                            <div style="display:flex;gap:8px;justify-content:flex-end">
+                                <button class="btn btn-primary" id="practice-open">Open Practice</button>
+                            </div>
+                            <div id="practice-history-preview" style="margin-top:12px;display:none">
+                                <h4 style="margin:8px 0 6px;font-size:13px;color:var(--text-3)">Recent sessions</h4>
+                                <ul id="practice-history-list" class="practice-history" style="list-style:none;padding:0;margin:0">
+                                    <!-- entries inserted by JS -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- Find Lawyers Section -->
@@ -219,7 +254,7 @@
                     <div class="lawyers-layout">
                         <aside class="filters-panel" id="filters-panel">
                             <div class="filter-section">
-                                <h4><i class="fas fa-tags"></i> Practice Areas</h4>
+                                <h4><i class="fas fa-tags"></i> Category</h4>
                                 <div class="filter-chips" id="category-chips"></div>
                             </div>
                             <div class="filter-section">
@@ -463,7 +498,72 @@
                                 <h4><i class="fas fa-lightbulb"></i> Popular Topics</h4>
                                 <div class="topic-tags" id="popular-topics"></div>
                             </div>
+                            <div class="sidebar-card" id="ai-disclaimer-banner">
+                                <h4><i class="fas fa-info-circle"></i> AI Assistant</h4>
+                                <div id="ai-disclaimer-content" style="font-size:13px;color:var(--text-3);line-height:1.3">The AI assistant provides general information and may not always be accurate. Verify important details with a lawyer.</div>
+                                <div style="margin-top:8px"><a href="#" id="ai-disclaimer-link">Read full disclaimer</a></div>
+                            </div>
                         </aside>
+                    </div>
+                </section>
+
+                <!-- Practice Session (Lawyers only) -->
+                <section id="practice" class="content-section" aria-labelledby="practice-title" style="display:none">
+                    <div class="section-header">
+                        <h1 id="practice-title">Practice Session</h1>
+                        <p class="section-subtitle">Mock courtroom / practice room for lawyers — rehearse opening statements, arguments or cross-examinations and get instant evaluation tips.</p>
+                    </div>
+                    <div class="practice-layout" style="display:flex;gap:18px;align-items:flex-start">
+                        <div style="flex:1;min-width:300px">
+                            <div class="sidebar-card">
+                                <h4>Sample Cases</h4>
+                                <select id="practice-case-select" class="filter-select" style="width:100%;padding:10px">
+                                    <option value="">-- Pick a sample case --</option>
+                                    <option value="criminal-bail">Bail Application — Theft (Non-bailable)</option>
+                                    <option value="family-custody">Child Custody — Interim Orders</option>
+                                    <option value="consumer-delay">Consumer Case — Delayed Possession & Loss</option>
+                                    <option value="corporate-dispute">Corporate Dispute — Board Resolution Challenge</option>
+                                    <option value="ipr-trademark">IPR — Trademark Infringement (Interim Injunction)</option>
+                                    <option value="tax-appeal">Tax Appeal — ITAT Stay Application</option>
+                                    <option value="environment-ngt">Environmental — NGT Pollution Complaint</option>
+                                    <option value="domestic-violence">Domestic Violence — Protection Order</option>
+                                </select>
+                                <p style="font-size:13px;color:var(--text-3);margin-top:10px">Choose a sample to prefill a practice prompt. Use the transcript area to type or paste your argument. Tip: follow the suggested structure in the Live Coach panel.</p>
+                                <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+                                    <button class="btn btn-primary" id="practice-toggle">Start Practice</button>
+                                    <button class="btn" id="practice-evaluate">Evaluate</button>
+                                    <div style="margin-left:auto;font-size:13px;color:var(--text-2)"><strong>Timer:</strong> <span id="practice-timer">00:00</span></div>
+                                </div>
+                                <div style="margin-top:10px">
+                                    <small style="color:var(--text-3)">Tip: Click Start Practice to begin a timed rehearsal. Type or paste your argument below and click Evaluate when ready — the coach will give a single clear score and one short tip.</small>
+                                </div>
+                            </div>
+                            <div class="sidebar-card" style="margin-top:12px">
+                                <h4>Session Transcript</h4>
+                                <textarea id="practice-transcript" placeholder="Type your argument or paste notes here..." rows="8" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border-2);"></textarea>
+                                <div style="margin-top:8px;display:flex;gap:8px;justify-content:flex-end">
+                                    <button class="btn btn-secondary" id="practice-save">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="flex:1.2;min-width:320px">
+                            <div class="sidebar-card">
+                                <h4>Live Coach</h4>
+                                <p id="practice-feedback" style="min-height:120px;color:var(--text-2);">Simple feedback shown here: total score out of 100 and one concise improvement tip. Keep arguments short and focused.</p>
+                                <div style="margin-top:10px">
+                                    <h5>Suggested structure (short)</h5>
+                                    <ul style="font-size:13px;color:var(--text-3);padding-left:18px">
+                                        <li><strong>Issue:</strong> One-line statement</li>
+                                        <li><strong>Rule & citation:</strong> One or two references</li>
+                                        <li><strong>Application & relief:</strong> One short paragraph</li>
+                                    </ul>
+                                </div>
+                                <div style="margin-top:12px">
+                                    <h5>Last evaluation</h5>
+                                    <div id="practice-breakdown" style="min-height:60px;font-size:13px;color:var(--text-2)"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -913,6 +1013,8 @@
             <div class="fab-menu" id="fab-menu">
                 <a href="#lawyers" class="fab-item" data-section="lawyers"><i class="fas fa-user-tie"></i><span>Find Lawyer</span></a>
                 <a href="#ai-assistant" class="fab-item" data-section="ai-assistant"><i class="fas fa-robot"></i><span>Ask AI</span></a>
+                <!-- Practice Session: visible to logged-in lawyers only -->
+                <a href="#practice" class="fab-item" data-section="practice" style="display:none"><i class="fas fa-play-circle"></i><span>Practice</span></a>
                 <a href="#complaints" class="fab-item" data-section="complaints"><i class="fas fa-flag"></i><span>File Complaint</span></a>
                 <a href="#courts" class="fab-item" data-section="courts"><i class="fas fa-map-marker-alt"></i><span>Find Court</span></a>
             </div>
@@ -922,5 +1024,45 @@
     <!-- Scripts -->
     <script src="./data/data.js?v=1"></script>
     <script src="./js/app.js?v=1"></script>
+    <script>
+    (function(){
+        function wireSuggestionChips(){
+            var chips = document.querySelectorAll('#chat-suggestions .suggestion-chip, #popular-topics .topic-tag');
+            chips.forEach(function(chip){
+                chip.addEventListener('click', function(){
+                    var q = this.dataset.query || this.textContent;
+                    var input = document.getElementById('chat-input');
+                    if(input){ input.value = q; input.focus(); }
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function(){
+            wireSuggestionChips();
+            // attach full-disclaimer modal link
+            var link = document.getElementById('ai-disclaimer-link');
+            if (link) link.addEventListener('click', function(e){ e.preventDefault(); var md = document.getElementById('ai-disclaimer-modal'); if (md) md.classList.add('active'); });
+        });
+    })();
+    </script>
+
+    <!-- AI disclaimer modal -->
+    <div id="ai-disclaimer-modal" class="modal ai-disclaimer-modal" aria-hidden="true">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close" onclick="document.getElementById('ai-disclaimer-modal').classList.remove('active')"><i class="fas fa-times"></i></button>
+            <div style="padding:10px 16px; max-height:60vh; overflow:auto">
+                <h3>AI Assistant Disclaimer</h3>
+                <p>The AI assistant provides general information to help you understand legal concepts. It is not a substitute for professional legal advice.</p>
+                <p>Please note:</p>
+                <ul>
+                    <li>The assistant may not always be accurate, complete, or up-to-date.</li>
+                    <li>It does not establish an attorney-client relationship.</li>
+                    <li>For important matters, consult a qualified lawyer and confirm facts with official sources.</li>
+                </ul>
+                <p>By using this platform you acknowledge the above and agree to verify any critical information with a licensed legal professional.</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

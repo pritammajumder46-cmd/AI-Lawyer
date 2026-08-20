@@ -38,7 +38,7 @@ const CASE_TYPE_STATS = [
 /* ============ Lawyers ============ */
 const LAWYERS = [
     {
-        id: "lw-001", name: "Adv. Ankita Adhikary", type: "private",
+        id: "lw-001", name: "Adv. Rajesh Sharma", type: "private",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=rajesh",
         categories: ["criminal", "civil"],
         location: { city: "New Delhi", state: "Delhi", area: "Tis Hazari Courts", pin: "110054" },
@@ -65,7 +65,7 @@ const LAWYERS = [
         ]
     },
     {
-        id: "lw-002", name: "Adv. Hari Sankar Roy", type: "private",
+        id: "lw-002", name: "Adv. Meera Krishnan", type: "private",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=meera",
         categories: ["family", "civil"],
         location: { city: "Mumbai", state: "Maharashtra", area: "Mumbai High Court", pin: "400032" },
@@ -92,7 +92,7 @@ const LAWYERS = [
         ]
     },
     {
-        id: "lw-003", name: "Adv. Souvik Bose", type: "government",
+        id: "lw-003", name: "Adv. Anil Kumar Rao", type: "government",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=anil",
         categories: ["constitutional", "criminal"],
         location: { city: "Hyderabad", state: "Telangana", area: "Telangana High Court", pin: "500066" },
@@ -118,7 +118,7 @@ const LAWYERS = [
         ]
     },
     {
-        id: "lw-004", name: "Adv. Ankita Adhikary", type: "private",
+        id: "lw-004", name: "Adv. Sarah Thomas", type: "private",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=sarah",
         categories: ["corporate", "ipr"],
         location: { city: "Bengaluru", state: "Karnataka", area: "Koramangala", pin: "560034" },
@@ -144,7 +144,7 @@ const LAWYERS = [
         ]
     },
     {
-        id: "lw-005", name: "Adv. Sreeja Ghosh", type: "private",
+        id: "lw-005", name: "Adv. Jaspreet Singh Kalra", type: "private",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=jaspreet",
         categories: ["criminal", "consumer"],
         location: { city: "Ludhiana", state: "Punjab", area: "Ludhiana District Court", pin: "141001" },
@@ -170,7 +170,7 @@ const LAWYERS = [
         ]
     },
     {
-        id: "lw-006", name: "Adv. Misti Sarkar", type: "pro-bono",
+        id: "lw-006", name: "Adv. Farhan Qureshi", type: "pro-bono",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=farhan",
         categories: ["constitutional", "labor"],
         location: { city: "Lucknow", state: "Uttar Pradesh", area: "Allahabad HC (Lucknow Bench)", pin: "226010" },
@@ -196,7 +196,7 @@ const LAWYERS = [
         ]
     },
     {
-        id: "lw-007", name: "Adv. Amrita Das", type: "private",
+        id: "lw-007", name: "Adv. K. Venkatesh Iyer", type: "private",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=venkatesh",
         categories: ["tax", "corporate"],
         location: { city: "Chennai", state: "Tamil Nadu", area: "Madras High Court", pin: "600104" },
@@ -274,7 +274,7 @@ const LAWYERS = [
         ]
     },
     {
-        id: "lw-010", name: "Adv. Sreeja Ghosh", type: "private",
+        id: "lw-010", name: "Adv. Ishita Banerjee", type: "private",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=ishita",
         categories: ["ipr", "corporate"],
         location: { city: "Kolkata", state: "West Bengal", area: "Calcutta High Court", pin: "700001" },

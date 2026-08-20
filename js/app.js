@@ -100,6 +100,21 @@
                 $$(".login-tabs .tab-btn").forEach((b) => b.classList.remove("active"));
                 btn.classList.add("active");
                 tab = btn.dataset.tab;
+                // Show extra field / messaging for lawyers
+                const barGroup = $("#bar-group");
+                const h1 = $(".login-header h1");
+                const p = $(".login-header p");
+                if (tab === "lawyer") {
+                    if (barGroup) barGroup.style.display = "";
+                    if (h1) h1.textContent = "Lawyer Sign In";
+                    if (p) p.textContent = "Verified lawyers get Practice Session access and advanced tools.";
+                    $(".btn-login").textContent = "Sign In";
+                } else {
+                    if (barGroup) barGroup.style.display = "none";
+                    if (h1) h1.textContent = "Welcome to Nyaya Guide";
+                    if (p) p.textContent = "Your Premium Legal Intelligence Platform";
+                    $(".btn-login").textContent = "Sign In";
+                }
             });
         });
 
@@ -113,15 +128,40 @@
             const email = emailIn.value.trim(), pass = passIn.value;
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast("Please enter a valid email address", "error", "Invalid Input"); return; }
             if (pass.length < 4) { toast("Password must be at least 4 characters", "error", "Weak Password"); return; }
+            // If lawyer login, require a bar registration value (basic validation)
+            if (tab === "lawyer") {
+                const barVal = $("#bar-number") ? $("#bar-number").value.trim() : "";
+                if (!barVal || !/^[A-Za-z0-9\-\/\s]{3,}$/.test(barVal)) { toast("Please enter a valid Bar Council registration number", "error", "Verification required"); return; }
+            }
             const btn = $(".btn-login");
             btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Verifying...';
             setTimeout(() => {
                 currentUser = { name: email.split("@")[0].replace(/[._]/g, " ").replace(/\b\w/g, (m) => m.toUpperCase()), email, role: loginRoles[tab], loginTime: Date.now() };
+                if (tab === "lawyer") { currentUser.barNumber = $("#bar-number").value.trim(); }
                 store.set("session", currentUser);
                 $("#login-modal").classList.remove("active");
                 $("#main-app").classList.remove("hidden");
                 $("#user-dropdown").querySelector(".user-name").textContent = currentUser.name;
                 $("#user-dropdown").querySelector(".user-role").textContent = currentUser.role;
+                // Reveal practice FAB and nav link for lawyers; hide for others
+                const fabPractice = document.querySelector('.fab-item[data-section="practice"]');
+                const navPractice = document.querySelector('.nav-link[data-section="practice"]');
+                const practiceSection = document.getElementById('practice');
+                if (currentUser.role === 'Lawyer') {
+                    if (fabPractice) fabPractice.style.display = 'flex';
+                    if (navPractice) navPractice.style.display = '';
+                    if (practiceSection) practiceSection.style.display = '';
+                    const practiceCard = document.getElementById('practice-card');
+                    if (practiceCard) practiceCard.style.display = '';
+                    // refresh badge/history if function exposed
+                    if (window.renderPracticeCard) window.renderPracticeCard();
+                } else {
+                    if (fabPractice) fabPractice.style.display = 'none';
+                    if (navPractice) navPractice.style.display = 'none';
+                    if (practiceSection) practiceSection.style.display = 'none';
+                    const practiceCard = document.getElementById('practice-card');
+                    if (practiceCard) practiceCard.style.display = 'none';
+                }
                 btn.disabled = false; btn.innerHTML = "Sign In";
                 initDashboard();
                 setTimeout(() => toast("Signed in as " + currentUser.name + " (" + currentUser.role + ")", "success", "Login Successful"), 400);
@@ -160,6 +200,15 @@
             $("#main-app").classList.add("hidden");
             $("#login-modal").classList.add("active");
             $("#user-dropdown").classList.remove("open");
+            // Hide practice when signed out
+            const fabPractice = document.querySelector('.fab-item[data-section="practice"]');
+            const navPractice = document.querySelector('.nav-link[data-section="practice"]');
+            const practiceSection = document.getElementById('practice');
+            const practiceCard = document.getElementById('practice-card');
+            if (fabPractice) fabPractice.style.display = 'none';
+            if (navPractice) navPractice.style.display = 'none';
+            if (practiceSection) practiceSection.style.display = 'none';
+            if (practiceCard) practiceCard.style.display = 'none';
             toast("You have been signed out", "info", "See you soon");
         });
 
@@ -682,7 +731,7 @@
         input.addEventListener("input", autoResize);
         input.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendChat(); } });
         $("#send-message").addEventListener("click", sendChat);
-        $$(".suggestion-chip").forEach((chip) => chip.addEventListener("click", () => { input.value = chip.dataset.query; sendChat(); }));
+        $$(".suggestion-chip").forEach((chip) => chip.addEventListener("click", () => { input.value = chip.dataset.query; input.focus(); }));
         $("#clear-chat-btn").addEventListener("click", () => {
             $("#chat-messages").innerHTML = '<div class="message ai-message"><div class="message-avatar"><i class="fas fa-robot"></i></div><div class="message-content"><p>' + esc(GREETINGS[1]) + "</p></div></div>";
             toast("Conversation cleared", "info");
@@ -696,11 +745,11 @@
         renderSavedResponses();
         const topics = ["Bail process", "Filing FIR", "Consumer complaint", "Property registration", "Legal aid", "Writ petition", "Divorce procedure", "Cheque bounce"];
         $("#popular-topics").innerHTML = topics.map((t) => '<span class="topic-tag" data-query="' + t + '">' + t + "</span>").join("");
-        $$("#popular-topics .topic-tag").forEach((t) => t.addEventListener("click", () => { input.value = t.dataset.query; sendChat(); }));
+        $$("#popular-topics .topic-tag").forEach((t) => t.addEventListener("click", () => { input.value = t.dataset.query; input.focus(); }));
     }
 
     function detectLang(text) {
-        if ($("#response-language").value !== "auto") return $("#response-language").value;
+        if ("#response-language" in window && $("#response-language") && $("#response-language").value !== "auto") return $("#response-language").value;
         const scriptPatterns = [
             [/[\u0900-\u097F]/, "hi"], [/[\u0B80-\u0BFF]/, "ta"], [/[\u0C00-\u0C7F]/, "te"], [/[\u0980-\u09FF]/, "bn"],
             [/[\u0D00-\u0D7F]/, "ml"], [/[\u0A80-\u0AFF]/, "gu"], [/[\u0C80-\u0CFF]/, "kn"], [/[\u0A00-\u0A7F]/, "pa"],
@@ -710,6 +759,15 @@
         return "en";
     }
 
+    /* ================== AI disclaimer translations & utilities ================== */
+    const AI_DISCLAIMERS = {
+        en: "<strong>Note:</strong> The AI assistant provides general information and may not always be accurate or complete. Please verify important details with an experienced lawyer or official sources before acting on this information.",
+        hi: "<strong>नोट:</strong> AI सहायक सामान्य जानकारी प्रदान करता है और हमेशा सटीक या पूर्ण नहीं हो सकता। कृपया महत्वपूर्ण जानकारी पर कार्रवाई करने से पहले किसी अनुभवी वकील या आधिकारिक स्रोत से सत्यापित करें।"
+    };
+
+    function getAIDisclaimerText(lang) { return AI_DISCLAIMERS[lang] || AI_DISCLAIMERS['en']; }
+    function getAIDisclaimerHtml(langCode) { return '<div class="ai-disclaimer" style="margin-top:12px;font-size:12px;color:var(--text-3);line-height:1.3;border-top:1px dashed var(--border-2);padding-top:8px">' + getAIDisclaimerText(langCode) + '</div>'; }
+
     function addMessage(role, html) {
         const box = $("#chat-messages");
         const div = document.createElement("div");
@@ -718,6 +776,178 @@
         box.appendChild(div);
         box.scrollTop = box.scrollHeight;
         return div;
+    }
+
+    function getCaseCategoryFromQuery(q) {
+        const text = (q || "").toLowerCase();
+        // explicit phrase map for common issues
+        const phraseMap = {
+            family: ["divorce", "custody", "child custody", "maintenance", "alimony", "domestic violence", "498a", "dowry", "matrimonial", "restoration of conjugal rights"],
+            criminal: ["fir", "bail", "ipc", "section", "murder", "theft", "robbery", "assault", "rape", "ndps", "cheque bounce", "fraud", "dacoity"],
+            consumer: ["consumer", "defective", "insurance claim", "medical negligence", "deficiency of service", "consumer forum", "oppose"],
+            labor: ["termination", "employee", "labour", "employment", "wages", "esi", "pf", "industrial dispute"],
+            corporate: ["company", "startup", "incorporation", "shareholder", "merger", "acquisition", "contract", "nda", "commercial"],
+            tax: ["tax", "gst", "income tax", "tds", "assessment", "notice", "tax evasion"],
+            ipr: ["patent", "trademark", "copyright", "infringement", "ip", "design", "passing off"],
+            environment: ["pollution", "environment", "ngt", "environmental", "coastal", "clearance"],
+            constitutional: ["writ", "fundamental rights", "article", "pib", "public interest", "constitution", "p i l", "p i l"]
+        };
+        // exact phrase detection (longer phrases first)
+        for (const [cat, arr] of Object.entries(phraseMap)) {
+            for (const ph of arr) {
+                if (text.indexOf(ph) !== -1) return cat;
+            }
+        }
+        // fallback to keyword-based simple mapping
+        const keywords = {
+            family: ["marriage", "wife", "husband", "custodian"],
+            criminal: ["accused", "charge", "complaint"],
+            consumer: ["complaint", "seller", "service"],
+            labor: ["employer", "dismissal", "salary"],
+            corporate: ["company", "director", "share"],
+            tax: ["assessment", "demand", "notice"],
+            ipr: ["trademark", "patent", "copyright"],
+            environment: ["pollution", "environment"],
+            constitutional: ["writ", "petition", "constitution"]
+        };
+        for (const [cat, arr] of Object.entries(keywords)) {
+            if (arr.some((k) => text.indexOf(k) !== -1)) return cat;
+        }
+        return "";
+    }
+
+    function extractIssueKeywords(q) {
+        const text = (q || "").toLowerCase();
+        const issues = [];
+        const patterns = [
+            [/(?:section\s*\d+|sec\.?\s*\d+|s\.?\s*\d+)/i, 'statute'],
+            [/\b(fir)\b/, 'fir'],
+            [/\b(bail)\b/, 'bail'],
+            [/\b(divorce|custody|maintenance|alimony)\b/, 'family'],
+            [/\b(cheque bounce|section 138|138)\b/, 'cheque-bounce'],
+            [/\b(trademark|patent|copyright|infringement)\b/, 'ipr'],
+            [/\b(gst|income tax|tds|tax)\b/, 'tax'],
+            [/\b(consumer|defective|medical negligence|insurance)\b/, 'consumer']
+        ];
+        for (const [re, tag] of patterns) if (re.test(text)) issues.push(tag);
+        return Array.from(new Set(issues));
+    }
+
+    function findRecommendedLawyers(q) {
+        const query = (q || "").toLowerCase();
+        const category = getCaseCategoryFromQuery(query);
+        const issues = extractIssueKeywords(query);
+
+        function scoreLawyer(lawyer) {
+            const doc = [lawyer.name, lawyer.bio, ...(lawyer.specializations || []), ...(lawyer.categories || [])].join(" ").toLowerCase();
+            let score = 0;
+            // strong boost for category match
+            if (category && lawyer.categories && lawyer.categories.includes(category)) score += 40;
+            // match specific issue keywords against specializations & bio
+            for (const issue of issues) {
+                if (issue === 'statute') {
+                    // if user mentioned a statute/section, prefer litigators (criminal/civil/constitutional)
+                    if (lawyer.categories.includes('criminal') || lawyer.categories.includes('constitutional') || lawyer.categories.includes('civil')) score += 12;
+                } else {
+                    // check specializations for the issue phrase
+                    const inSpec = (lawyer.specializations || []).some((s) => s.toLowerCase().includes(issue.replace(/[-_]/g, ' ')));
+                    const inBio = doc.indexOf(issue) !== -1;
+                    if (inSpec) score += 20;
+                    if (inBio) score += 6;
+                }
+            }
+            // phrase-level match for specialization
+            for (const spec of lawyer.specializations || []) {
+                const sp = spec.toLowerCase();
+                if (query.indexOf(sp) !== -1) score += 20;
+            }
+            // partial word match from specialization tokens
+            for (const spec of lawyer.specializations || []) {
+                for (const token of spec.toLowerCase().split(/\W+/)) {
+                    if (token.length > 4 && query.indexOf(token) !== -1) score += 8;
+                }
+            }
+            // category name mention
+            for (const cat of lawyer.categories || []) if (query.indexOf(cat) !== -1) score += 6;
+            // location match
+            if (lawyer.location && ((query.indexOf(lawyer.location.city.toLowerCase()) !== -1) || (query.indexOf(lawyer.location.state.toLowerCase()) !== -1))) score += 6;
+            // direct substring match in profile
+            if (doc.indexOf(query) !== -1) score += 8;
+            // rating & experience small boosts
+            score += (lawyer.rating || 0) * 4; // up to 20
+            score += Math.min(lawyer.experience || 0, 30) / 30 * 6; // up to 6
+            // review count small boost
+            score += Math.min(lawyer.reviewCount || 0, 500) / 500 * 4; // up to 4
+            return score;
+        }
+
+        const scored = LAWYERS.map((l) => ({ lawyer: l, score: scoreLawyer(l) }));
+        const positives = scored.filter((s) => s.score > 0).sort((a, b) => b.score - a.score || b.lawyer.rating - a.lawyer.rating);
+        if (positives.length) return positives.slice(0, 3).map((p) => p.lawyer);
+
+        // fallback: if category known, return top-rated in that category
+        if (category) {
+            const catList = LAWYERS.filter((l) => l.categories && l.categories.includes(category)).sort((a, b) => b.rating - a.rating || b.experience - a.experience);
+            if (catList.length) return catList.slice(0, 3);
+        }
+
+        // final fallback: overall top rated
+        return LAWYERS.slice().sort((a, b) => b.rating - a.rating || b.experience - a.experience).slice(0, 3);
+    }
+
+    /* ================== Recommendation logging & diagnostics ================== */
+    function logRecommendationClick(lawyerId, query) {
+        try {
+            const entries = store.get('recommend_clicks', []);
+            entries.unshift({ lawyerId, query: query || '', time: Date.now() });
+            store.set('recommend_clicks', entries.slice(0, 200));
+        } catch (e) { console.warn('Failed to log recommendation click', e); }
+    }
+
+    function runRecommendationDiagnostics() {
+        const samples = [
+            'I need bail after FIR for theft',
+            'How to file for divorce and custody',
+            'Patent infringement - cease and desist',
+            'Received GST assessment notice',
+            'Medical negligence compensation claim'
+        ];
+        const results = samples.map((s) => ({ q: s, recommendations: findRecommendedLawyers(s).map((l) => ({ id: l.id, name: l.name, categories: l.categories })) }));
+        try { store.set('recommendation_diagnostics', { time: Date.now(), results }); } catch (e) { }
+        console.group('Recommendation diagnostics');
+        console.table(results.map(r => ({ query: r.q, recommended: r.recommendations.map(rr => rr.name).join(', ') })));
+        console.groupEnd();
+        try { toast('Recommendation diagnostics run (open console for details)', 'info'); } catch (e) { }
+        return results;
+    }
+
+    function buildRecommendedLawyersHtml(q) {
+        const lawyers = findRecommendedLawyers(q);
+        if (!lawyers.length) return "";
+        return '<div style="margin-top:14px;padding:12px 12px 8px;border:1px solid var(--border-2);border-radius:12px;background:rgba(99,102,241,0.05);box-shadow:inset 0 0 0 1px rgba(99,102,241,0.04);">' +
+            '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px;">' +
+            '<strong style="font-size:12px;color:var(--text-1);">Recommended lawyers for this case</strong>' +
+            '<span style="font-size:10px;color:var(--text-3);">From lawyer database</span>' +
+            '</div>' +
+            lawyers.map((lawyer) => {
+                const cat = lawyer.categories.map((c) => CATEGORY_MAP[c] ? CATEGORY_MAP[c].name : c).slice(0, 2).join(" • ");
+                return '<div style="display:flex;gap:10px;padding:8px 0;border-top:1px solid var(--border-2);">' +
+                    '<img src="' + lawyer.avatar + '" alt="' + esc(lawyer.name) + '" style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid rgba(99,102,241,0.2);">' +
+                    '<div style="flex:1;min-width:0;">' +
+                    '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">' +
+                    '<div style="min-width:0;">' +
+                    '<div style="font-size:12px;font-weight:700;color:var(--text-1);">' + esc(lawyer.name) + '</div>' +
+                    '<div style="font-size:10px;color:var(--text-3);">' + esc(lawyer.location.city + ", " + lawyer.location.state) + '</div>' +
+                    '</div>' +
+                    '<span style="white-space:nowrap;font-size:10px;color:var(--accent);">' + renderStars(lawyer.rating).replace(/<i /g, '<i style="font-size:9px;" ') + ' ' + lawyer.rating.toFixed(1) + '</span>' +
+                    '</div>' +
+                    '<div style="font-size:10px;color:var(--text-2);margin-top:4px;">' + esc(cat) + '</div>' +
+                    '<div style="font-size:10px;color:var(--text-3);margin-top:4px;">' + esc(lawyer.specializations.slice(0, 2).join(" • ")) + '</div>' +
+                    '<button type="button" class="recommendation-profile-btn" data-lid="' + lawyer.id + '" style="margin-top:6px;padding:5px 9px;border:none;border-radius:999px;background:var(--primary);color:#fff;font-size:10px;font-weight:700;cursor:pointer;">View profile</button>' +
+                    '</div>' +
+                    '</div>';
+            }).join("") +
+            '</div>';
     }
 
     function findKBAnswer(q) {
@@ -767,7 +997,23 @@
             } else {
                 html = "<p>I couldn't find a direct match for that query in my knowledge base.</p><p>You can try:</p><ul><li>A specific statute or section (e.g., <em>Section 138 NI Act</em>)</li><li>A procedure (e.g., <em>divorce procedure</em>, <em>RTI filing</em>)</li><li>A topic (e.g., <em>wills</em>, <em>custody</em>, <em>GST</em>)</li></ul>";
             }
-            typing.querySelector(".message-content").innerHTML = html;
+            const messageContent = typing.querySelector(".message-content");
+            messageContent.innerHTML = html;
+            const recommendations = buildRecommendedLawyersHtml(q);
+            if (recommendations) {
+                messageContent.insertAdjacentHTML("beforeend", recommendations);
+                messageContent.querySelectorAll(".recommendation-profile-btn").forEach((btn) => {
+                    btn.addEventListener("click", function(e) {
+                        try { logRecommendationClick(this.dataset.lid, q); } catch (ex) { }
+                        openLawyerProfile(this.dataset.lid);
+                    });
+                });
+            }
+            // Add AI accuracy disclaimer after each AI response (translated based on detected language)
+            try {
+                const langCode = detectLang(q) || 'en';
+                messageContent.insertAdjacentHTML("beforeend", getAIDisclaimerHtml(langCode));
+            } catch (e) { }
             if ($("#voice-response").checked) speakText($("#cite-sources").checked ? html.replace(/<[^>]*>/g, "") : html.replace(/<[^>]*>/g, ""), lang);
             chatInputBusy = false;
             const convo = chatState.conversations;
@@ -1709,7 +1955,197 @@
         toast("Interface language set to " + (l ? l.name : code), "success", "Language Updated");
     }
 
-    /* ================== Init ================== */
+    /* ================== Practice Session (Lawyer) ================== */
+function initPractice() {
+    const practiceSection = document.getElementById('practice');
+    if (!practiceSection) return;
+    // ensure the section is shown only when a lawyer is active
+    if (currentUser && currentUser.role === 'Lawyer') practiceSection.style.display = '';
+    else practiceSection.style.display = 'none';
+
+    const toggleBtn = document.getElementById('practice-toggle');
+    const timerEl = document.getElementById('practice-timer');
+    const caseSelect = document.getElementById('practice-case-select');
+    const transcript = document.getElementById('practice-transcript');
+    const practiceCardEl = document.getElementById('practice-card');
+    const practiceBadge = document.getElementById('practice-badge');
+    const practiceBadgeScore = document.getElementById('practice-badge-score');
+    const historyPreview = document.getElementById('practice-history-preview');
+    const historyList = document.getElementById('practice-history-list');
+
+    // simple state helper
+    function isRunning() { return !!timer; }
+
+    function renderPracticeCard() {
+        // expose to global so other modules (login) can refresh it
+        window.renderPracticeCard = renderPracticeCard;
+        try {
+            const saved = store.get('practice_notes', []);
+            if (!historyPreview || !historyList) return;
+            if (saved && saved.length) {
+                historyPreview.style.display = '';
+                if (practiceBadge && practiceBadgeScore) {
+                    const s0 = saved[0].score;
+                    if (typeof s0 === 'number') {
+                        practiceBadge.style.display = '';
+                        practiceBadgeScore.textContent = s0;
+                    } else {
+                        practiceBadge.style.display = 'none';
+                    }
+                }
+                historyList.innerHTML = saved.slice(0,5).map((entry) => {
+                    const dt = new Date(entry.time).toLocaleString();
+                    const sc = (typeof entry.score === 'number') ? ('<span class="ph-score">' + entry.score + '/100</span>') : '';
+                    const txt = esc((entry.note || '').slice(0,80)) + ((entry.note || '').length>80? '…':'');
+                    return '<li style="padding:8px 0;border-bottom:1px solid var(--border-2);display:flex;justify-content:space-between;align-items:center;gap:8px"><div style="min-width:0"><div style="font-size:12px;color:var(--text-1)">' + txt + '</div><div style="font-size:11px;color:var(--text-3)">' + dt + '</div></div><div>' + sc + '<button class="btn btn-sm btn-secondary practice-load" data-time="' + entry.time + '" style="margin-left:8px">Load</button></div></li>';
+                }).join('');
+                // attach listeners
+                $$('.practice-load', historyList).forEach((btn) => btn.addEventListener('click', (e) => {
+                    const t = btn.dataset.time;
+                    const savedAll = store.get('practice_notes', []);
+                    const entry = savedAll.find(s => String(s.time) === t);
+                    if (entry) {
+                        if (transcript) transcript.value = entry.note || '';
+                        if (caseSelect && entry.case) caseSelect.value = entry.case;
+                        if (entry.score !== undefined && feedback) feedback.innerHTML = '<div style="font-weight:700;margin-bottom:8px">Loaded score: ' + entry.score + '/100</div>';
+                        currentSection('#practice');
+                    }
+                }));
+            } else {
+                historyPreview.style.display = 'none';
+                if (practiceBadge) practiceBadge.style.display = 'none';
+                historyList.innerHTML = '';
+            }
+        } catch (e) { console.warn('renderPracticeCard failed', e); }
+    }
+
+
+    const evaluateBtn = document.getElementById('practice-evaluate');
+    const feedback = document.getElementById('practice-feedback');
+    const saveBtn = document.getElementById('practice-save');
+
+    let timer = null, seconds = 0;
+    function fmt(s) { const mm = String(Math.floor(s/60)).padStart(2,'0'); const ss = String(s%60).padStart(2,'0'); return mm+":"+ss; }
+
+    // Start / Stop toggle for a simpler UX
+    if (toggleBtn) toggleBtn.addEventListener('click', () => {
+        if (!isRunning()) {
+            // start
+            toggleBtn.textContent = 'Stop Practice';
+            toggleBtn.classList.add('active');
+            transcript && transcript.focus();
+            seconds = 0; timerEl.textContent = fmt(seconds);
+            timer = setInterval(() => { seconds++; timerEl.textContent = fmt(seconds); }, 1000);
+            toast('Practice session started', 'info');
+        } else {
+            // stop
+            clearInterval(timer); timer = null;
+            toggleBtn.textContent = 'Start Practice';
+            toggleBtn.classList.remove('active');
+            toast('Practice session stopped', 'success');
+        }
+    });
+
+    if (caseSelect) caseSelect.addEventListener('change', () => {
+        const v = caseSelect.value;
+        if (v === 'criminal-bail') transcript.value = 'Practice prompt: Represent client for a bail application in a non-bailable offence. Focus on urgency, community ties and lack of flight risk.';
+        else if (v === 'family-custody') transcript.value = 'Practice prompt: Argue for interim custody emphasizing welfare of child and parent-child bond.';
+        else if (v === 'consumer-delay') transcript.value = 'Practice prompt: Draft opening for consumer claim based on delay in possession and losses incurred.';
+        else if (v === 'corporate-dispute') transcript.value = 'Practice prompt: Argue against board resolution validity on grounds of procedure breach.';
+    });
+
+    if (evaluateBtn) evaluateBtn.addEventListener('click', () => {
+        // stop running timer first for a stable evaluation
+        if (isRunning()) { clearInterval(timer); timer = null; if (toggleBtn) { toggleBtn.textContent = 'Start Practice'; toggleBtn.classList.remove('active'); } }
+        const text = (transcript && transcript.value || '').trim();
+        if (!text) { toast('Write or paste your argument before evaluating', 'warning'); return; }
+        // Heuristic rubric scoring (client-side only)
+        const words = text.split(/\s+/).filter(Boolean).length;
+        const sentences = text.split(/[.!?]+/).map(s=>s.trim()).filter(Boolean).length || 1;
+        const avgWordsPerSentence = words / sentences;
+
+        // Structure (0-30): detect presence of Issue / Rule / Application / Conclusion
+        const structTokens = ['issue','rule','application','conclusion','analysis','submit','submissions'];
+        let foundStruct = 0;
+        structTokens.forEach(tok => { if (new RegExp('\\b'+tok+'\\b','i').test(text)) foundStruct++; });
+        let structureScore = Math.round(Math.min(30, (foundStruct / structTokens.length) * 30 + (Math.min(400, words) / 400) * 8));
+
+        // Legal accuracy & citations (0-30): look for Section/Article/Act/IPC and numeric section patterns
+        let legalMatches = 0;
+        if (/\b(section|sec\.?|article|art\.?|act|ipc|code)\b/i.test(text)) legalMatches += 1;
+        if (/section\s*\d+/i.test(text) || /s\.?\s*\d+/i.test(text) || /article\s*\d+/i.test(text)) legalMatches += 1;
+        if (/\b(case|v\.|versus)\b/i.test(text)) legalMatches += 1;
+        let legalScore = Math.min(30, legalMatches * 10 + (foundStruct > 1 ? 4 : 0));
+
+        // Clarity & concision (0-20): ideal avg words per sentence between 8 and 18
+        let clarityScore = 0;
+        const ideal = 13;
+        const diff = Math.abs(avgWordsPerSentence - ideal);
+        clarityScore = Math.max(0, Math.round(20 - Math.min(20, (diff / ideal) * 20)));
+
+        // Persuasiveness (0-10): presence of persuasive connectors / assertive language
+        const persuasiveTokens = ['therefore','hence','thus','accordingly','submit','respectfully','we submit','strongly','demonstrate','clearly'];
+        let pcount = 0; persuasiveTokens.forEach(tok => { if (new RegExp('\\b'+tok+'\\b','i').test(text)) pcount++; });
+        let persuasionScore = Math.min(10, pcount * 2 + (words > 80 ? 2 : 0));
+
+        // Time management (0-10): prefer concise practice under 5 minutes. If timer running use seconds else neutral 6
+        let secs = 0;
+        if (timerEl && timerEl.textContent) {
+            const parts = timerEl.textContent.split(':').map(Number);
+            secs = (parts[0] || 0) * 60 + (parts[1] || 0);
+        }
+        let timeScore = 6;
+        if (secs > 0) {
+            timeScore = Math.max(0, Math.round(10 * Math.max(0, 1 - secs / 300)));
+        }
+
+        const total = structureScore + legalScore + clarityScore + persuasionScore + timeScore;
+        // choose tip based on lowest component
+        const comps = [
+            {key:'Structure',score:structureScore,tip:'Follow the Issue → Rule → Application → Conclusion structure closely and label sections.'},
+            {key:'Legal accuracy',score:legalScore,tip:'Cite specific statutes or recent precedent by name/section where relevant.'},
+            {key:'Clarity',score:clarityScore,tip:'Shorten long sentences and focus on one legal point per paragraph.'},
+            {key:'Persuasiveness',score:persuasionScore,tip:'Use clear signposting (therefore, hence) and assertive conclusions.'},
+            {key:'Time management',score:timeScore,tip:'Aim for a 2-4 minute opening; practice with the timer.'}
+        ];
+        comps.sort((a,b)=>a.score-b.score);
+        const lowest = comps[0];
+
+        // Build breakdown HTML
+        const pct = (n, max) => Math.round((n/max)*100);
+        const breakdownHtml = comps.map(c => {
+            const w = c.key === 'Structure' ? 30 : c.key === 'Legal accuracy' ? 30 : c.key === 'Clarity' ? 20 : c.key === 'Persuasion' ? 10 : 10;
+            const displayScore = c.score;
+            const percent = pct(displayScore, w);
+            return '<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:13px"><div><strong>' + esc(c.key) + '</strong></div><div>' + displayScore + '/' + w + '</div></div><div style="background:var(--border-2);height:8px;border-radius:6px;overflow:hidden;margin-top:6px"><div style="width:' + percent + '%;height:8px;background:linear-gradient(90deg,var(--indigo),var(--success));"></div></div></div>';
+        }).join('');
+
+        if (feedback) feedback.innerHTML = '<div style="font-weight:700;margin-bottom:8px">Total: ' + total + '/100</div><div style="margin-bottom:8px;color:var(--text-2)">Top tip: ' + esc(lowest.tip) + '</div>';
+        const breakdownBox = document.getElementById('practice-breakdown');
+        if (breakdownBox) breakdownBox.innerHTML = breakdownHtml;
+        // Save evaluation into history
+        try {
+            const saved = store.get('practice_notes', []);
+            saved.unshift({ time: Date.now(), note: text, case: caseSelect ? caseSelect.value : '', score: total, duration: secs });
+            store.set('practice_notes', saved.slice(0, 50));
+        } catch (e) { console.warn('failed saving practice note', e); }
+        renderPracticeCard();
+        toast('Practice evaluated — score ' + total + '/100', 'success', 'Evaluation');
+    });
+
+    if (saveBtn) saveBtn.addEventListener('click', () => {
+        const text = (transcript && transcript.value || '').trim();
+        if (!text) { toast('Nothing to save', 'warning'); return; }
+        const saved = store.get('practice_notes', []);
+        saved.unshift({ time: Date.now(), note: text, case: caseSelect ? caseSelect.value : '' });
+        store.set('practice_notes', saved.slice(0, 50));
+        renderPracticeCard();
+        toast('Practice notes saved', 'success');
+    });
+    renderPracticeCard();
+}
+
+/* ================== Init ================== */
     document.addEventListener("DOMContentLoaded", () => {
         bootLoading();
         initAuth();
@@ -1723,6 +2159,17 @@
         initCourts();
         initPanels();
         initLanguage();
+        initPractice();
+        // Wire practice open button on dashboard
+        const pc = document.getElementById('practice-open');
+        if (pc) pc.addEventListener('click', () => {
+            // Only open if currentUser is a lawyer
+            if (currentUser && currentUser.role === 'Lawyer') {
+                currentSection('#practice');
+            } else {
+                toast('Practice Room available for verified lawyers only', 'warning');
+            }
+        });
         if (currentUser) initDashboard();
     });
 })();
